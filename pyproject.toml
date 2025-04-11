@@ -1,0 +1,9 @@
+[project]
+name = "42pwn"
+version = "0.1.0"
+description = "Let's learn pwnable!"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "ptrlib>=2.5.0",
+]
