@@ -1,4 +1,3 @@
-import time
 from ptrlib import *
 
 def main():
