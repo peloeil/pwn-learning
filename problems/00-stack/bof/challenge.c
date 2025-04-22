@@ -12,4 +12,4 @@ int main(void) {
     puts(buf);
     return 0;
 }
-// gcc chall.c -fno-stack-protector -no-pie -o chall
+// gcc challenge.c -fno-stack-protector -no-pie -o challenge
