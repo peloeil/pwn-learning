@@ -1,7 +1,8 @@
 from ptrlib import *
 
-elf = ELF("./easy")
-proc = Process("./easy")
+binpath = "../../../problems/00-stack/rop/easy"
+elf = ELF(binpath)
+proc = Process(binpath)
 
 
 def main():

@@ -1,7 +1,8 @@
 from ptrlib import *
 
-elf = ELF("./chall")
-proc = Process("./chall")
+binpath = "../../../problems/00-stack/rop/hard"
+elf = ELF(binpath)
+proc = Process(binpath)
 
 
 def leak_canary():

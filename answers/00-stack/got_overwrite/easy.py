@@ -1,7 +1,8 @@
 from ptrlib import *
 
-elf = ELF("./easy")
-proc = Process("./easy")
+binpath = "../../../problems/00-stack/got_overwrite/easy"
+elf = ELF(binpath)
+proc = Process(binpath)
 
 def main():
     addr_got_exit = elf.got("exit")

@@ -1,9 +1,11 @@
 from ptrlib import *
 
 
-io = Process("./hard")
-elf = ELF("./hard")
-libc = ELF("/usr/lib/libc.so.6")
+binpath = "../../../problems/00-stack/fsb/hard"
+libcpath = "/usr/lib/libc.so.6"
+io = Process(binpath)
+elf = ELF(binpath)
+libc = ELF(libcpath)
 
 
 # before FSB: *ptr == before
