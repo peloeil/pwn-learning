@@ -13,3 +13,4 @@ int main(void) {
 
     exit(0);
 }
+// gcc hard.c -no-pie -o hard
