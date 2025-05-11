@@ -1,7 +1,7 @@
 from ptrlib import *
 
 
-binpath = "../../../problems/00-stack/fsb/easy"
+binpath = "../../../problems/stack/fsb/easy"
 libcpath = "/usr/lib/libc.so.6"
 io = Process(binpath)
 elf = ELF(binpath)

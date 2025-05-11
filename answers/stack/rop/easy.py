@@ -1,6 +1,6 @@
 from ptrlib import *
 
-binpath = "../../../problems/00-stack/rop/easy"
+binpath = "../../../problems/stack/rop/easy"
 elf = ELF(binpath)
 proc = Process(binpath)
 
